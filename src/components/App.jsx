@@ -1,24 +1,43 @@
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import { useId } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import Title from './Title/Title';
 import SearchBox from './SearchBox/SearchBox';
 import ContactList from './ContactList/ContactList';
+import contactLists from './ContactList/contactLists.json';
 
 export default function App() {
-  const contactLists = [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ];
+  const [contacts, setContact] = useState(() => {
+    const savedContacts = window.localStorage.getItem('contacts');
+    if (savedContacts !== null) {
+      //   const contactList = JSON.parse(savedContacts);
+      //   // console.log(contactList.submits);
+      //   return contactList.submits;
+    }
+    return contactLists;
+  });
 
+  // console.log(submits);
+
+  const hendleDelete = id => {
+    console.log(id);
+    setContact(prev => prev.filter(contacts => contacts.id !== id));
+  };
+
+  const handleSubmit = (values, actions) => {
+    setContact(prev => [...prev, values]);
+    actions.resetForm();
+  };
+
+  useEffect(() => {
+    window.localStorage.setItem('contacts', JSON.stringify({ contacts }));
+  }, [contacts]);
   return (
     <>
       <Title>Phonebook</Title>
-      <ContactForm />
+      <ContactForm onSubmit={handleSubmit} />
       <SearchBox />
-      <ContactList contactLists={contactLists} />
+      <ContactList contactLists={contacts} hendleDelete={hendleDelete} />
     </>
   );
 }
