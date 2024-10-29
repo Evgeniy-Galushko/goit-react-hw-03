@@ -12,7 +12,6 @@ export default function App() {
     const savedContacts = window.localStorage.getItem('contacts');
     const contactList = JSON.parse(savedContacts);
     const leng = contactList.contacts.length;
-    console.log(leng);
     if (leng !== 0) {
       return contactList.contacts;
     }
@@ -20,7 +19,6 @@ export default function App() {
     return contactLists;
   });
 
-  console.log(contacts);
   const [search, setSearch] = useState('');
 
   const hendleDelete = id => {
