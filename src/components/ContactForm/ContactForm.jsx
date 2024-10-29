@@ -7,14 +7,21 @@ import s from './ContactForm.module.css';
 export default function ContactForm({ onSubmit }) {
   const idName = useId();
   const idNumber = useId();
+  const regs = {
+    // "^\w+(\.\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"
+    name: '^[а-яА-Яa-zA-Z ]{3,50}$',
+    number: /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){3,16}(\s*)?$/,
+  };
 
   const pattern = Yup.object().shape({
     name: Yup.string()
-      .min(3, 'Too Short!')
-      .max(50, 'Too Long!')
+      .matches(regs.name, 'Too Short!')
+      // .min(3, 'Too Short!')
+      // .max(50, 'Too Long!')
       .required('Required'),
-    number: Yup.number()
-      .min(3, 'Too Short!')
+    number: Yup.string()
+      .matches(regs.number, 'Too Short!')
+      // .min(3, 'Too Short!')
       // .max(50, 'Too Long!')
       .required('Required'),
   });

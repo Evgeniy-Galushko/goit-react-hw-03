@@ -10,10 +10,10 @@ import contactLists from './ContactList/contactLists.json';
 export default function App() {
   const [contacts, setContact] = useState(() => {
     const savedContacts = window.localStorage.getItem('contacts');
-    console.log(savedContacts);
-    if (savedContacts !== null) {
-      const contactList = JSON.parse(savedContacts);
-      console.log(contactList.contacts);
+    const contactList = JSON.parse(savedContacts);
+    const leng = contactList.contacts.length;
+    console.log(leng);
+    if (leng !== 0) {
       return contactList.contacts;
     }
 
