@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { nanoid } from 'nanoid';
 // import { useId } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import Title from './Title/Title';
@@ -9,15 +10,18 @@ import contactLists from './ContactList/contactLists.json';
 export default function App() {
   const [contacts, setContact] = useState(() => {
     const savedContacts = window.localStorage.getItem('contacts');
+    console.log(savedContacts);
     if (savedContacts !== null) {
-      //   const contactList = JSON.parse(savedContacts);
-      //   // console.log(contactList.submits);
-      //   return contactList.submits;
+      const contactList = JSON.parse(savedContacts);
+      console.log(contactList.contacts);
+      return contactList.contacts;
     }
+
     return contactLists;
   });
 
-  // console.log(submits);
+  console.log(contacts);
+  const [search, setSearch] = useState('');
 
   const hendleDelete = id => {
     console.log(id);
@@ -25,9 +29,18 @@ export default function App() {
   };
 
   const handleSubmit = (values, actions) => {
-    setContact(prev => [...prev, values]);
+    const newContact = { ...values, id: nanoid(4) };
+    setContact(prev => [...prev, newContact]);
     actions.resetForm();
   };
+
+  const handleChange = event => {
+    setSearch(event.target.value);
+  };
+
+  const searchEngine = contacts.filter(contact => {
+    return contact.name.toLowerCase().includes(search.toLowerCase());
+  });
 
   useEffect(() => {
     window.localStorage.setItem('contacts', JSON.stringify({ contacts }));
@@ -36,8 +49,8 @@ export default function App() {
     <>
       <Title>Phonebook</Title>
       <ContactForm onSubmit={handleSubmit} />
-      <SearchBox />
-      <ContactList contactLists={contacts} hendleDelete={hendleDelete} />
+      <SearchBox handleChange={handleChange} value={search} />
+      <ContactList contactLists={searchEngine} hendleDelete={hendleDelete} />
     </>
   );
 }

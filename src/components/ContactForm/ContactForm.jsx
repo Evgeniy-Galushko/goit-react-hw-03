@@ -3,7 +3,6 @@ import { ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useId } from 'react';
 import s from './ContactForm.module.css';
-import { nanoid } from 'nanoid';
 
 export default function ContactForm({ onSubmit }) {
   const idName = useId();
@@ -11,18 +10,19 @@ export default function ContactForm({ onSubmit }) {
 
   const pattern = Yup.object().shape({
     name: Yup.string()
-      .min(4, 'Too Short!')
-      .max(25, 'Too Long!')
+      .min(3, 'Too Short!')
+      .max(50, 'Too Long!')
       .required('Required'),
-    number: Yup.number('-').min(7, 'Too Short!').required('Required'),
+    number: Yup.number()
+      .min(3, 'Too Short!')
+      // .max(50, 'Too Long!')
+      .required('Required'),
   });
 
   const initialValues = {
-    id: nanoid(4),
     name: '',
     number: '',
   };
-  console.log(initialValues.id);
   return (
     <Formik
       initialValues={initialValues}
